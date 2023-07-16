@@ -6,6 +6,8 @@
 
 本项目希望抛砖引玉，能够帮助大家快速地做技术验证和技术路线选取。
 
+默认使用的embedding模型为[moka-ai/m3e-large](https://huggingface.co/moka-ai/m3e-large)
+
 目前仅支持上传 txt、docx、md等文本格式文件。
 
 默认使用余弦距离计算文本相似性。
@@ -28,9 +30,7 @@
 python web.py
 ```
 
-
-
-### demo 讲解
+### Demo讲解
 
 ##### 文档交互模块：
 
