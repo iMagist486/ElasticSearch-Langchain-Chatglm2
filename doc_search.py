@@ -49,13 +49,13 @@ class ES:
                 mapping = _default_knn_mapping(dims)
                 self.client.indices.create(index=self.es_params.index_name, body={"mappings": mapping})
             filename = os.path.split(file_obj.name)[-1]
-            file_path = 'data/'+filename
+            file_path = 'data/' + filename
             shutil.move(file_obj.name, file_path)
             docs = load_file(file_path)
             self.es.add_documents(docs)
             return "插入成功"
-        except:
-            return "插入失败"
+        except Exception as e:
+            return e
 
     def exact_search(self, query, top_k):
         result = []
