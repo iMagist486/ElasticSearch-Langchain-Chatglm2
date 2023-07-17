@@ -1,6 +1,5 @@
-torch~=2.0.1+cu118
 transformers
 sentence_transformers
-langchain~=0.0.234
-gradio
+langchain
 elasticsearch
+gradio

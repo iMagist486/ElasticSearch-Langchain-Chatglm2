@@ -67,8 +67,6 @@ docker run --gpus "device=0" -p 8000:8000 -it es-chatglm:v1.0 bash
 # To do
 
 1. 多文档类型支持
-2. 文档切分可配置
-3. docker部署Elasticsearch教程
 
 # 引用及感谢
 

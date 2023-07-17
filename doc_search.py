@@ -24,10 +24,10 @@ def _default_knn_mapping(dims: int) -> Dict:
     }
 
 
-def load_file(filepath):
+def load_file(filepath, chunk_size, chunk_overlap):
     loader = TextLoader(filepath, encoding='utf-8')
     documents = loader.load()
-    text_splitter = CharacterTextSplitter(separator='\n', chunk_size=300, chunk_overlap=10)
+    text_splitter = CharacterTextSplitter(separator='\n', chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     docs = text_splitter.split_documents(documents)
     return docs
 
@@ -42,7 +42,7 @@ class ES:
         self.es = ElasticKnnSearch(index_name=self.es_params.index_name, embedding=self.embedding,
                                    es_connection=self.client)
 
-    def doc_upload(self, file_obj):
+    def doc_upload(self, file_obj, chunk_size, chunk_overlap):
         try:
             if not self.client.indices.exists(index=self.es_params.index_name):
                 dims = len(self.embedding.embed_query("test"))
@@ -51,7 +51,7 @@ class ES:
             filename = os.path.split(file_obj.name)[-1]
             file_path = 'data/' + filename
             shutil.move(file_obj.name, file_path)
-            docs = load_file(file_path)
+            docs = load_file(file_path, chunk_size, chunk_overlap)
             self.es.add_documents(docs)
             return "插入成功"
         except Exception as e:
