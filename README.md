@@ -30,35 +30,35 @@
 python web.py
 ```
 
-### Demo讲解
+# 📑Demo详解
 
 ![demo_pic](docs/demo_pic.png)
 
-##### 文档交互模块：
+### 文档交互模块：
 
 ES插入时文档交互模块会显示插入是否成功，或抛出异常内容；问答时，文档交互模块会展示查询到的内容，包括文档来源，文档内容和相似度分数。
 
-##### 查询设置模块：
+### 查询设置模块：
 
-三种查询模式，具体区别见Elasticsearch官方文档
+**三种查询模式**，具体区别见Elasticsearch官方文档
 
-​	近似查询：[Approximate kNN](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html#approximate-knn)
+近似查询：[Approximate kNN](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html#approximate-knn)
 
-​	混合查询：[Combine approximate kNN with other features](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html#_combine_approximate_knn_with_other_features)
+混合查询：[Combine approximate kNN with other features](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html#_combine_approximate_knn_with_other_features)
 
-​	精确查询：[Exact, brute-force kNN](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html#exact-knn) 
+精确查询：[Exact, brute-force kNN](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html#exact-knn) 
 
-查询阈值：
+**查询阈值**：
 
-​	仅返回相似度分数大于阈值的查询结果，0为不设限制
+仅返回相似度分数大于阈值的查询结果，0为不设限制
 
-top_k：
+**top_k**：
 
-​	返回最相关的k个文本
+返回最相关的k个文本
 
-knn_boost：
+**knn_boost**：
 
-​	适用于混合查询，knn_score所占比例
+适用于混合查询，knn_score所占比例
 
 
 
