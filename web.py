@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # Elasticsearch + ChatGLM demo
     [https://github.com/iMagist486/ElasticSearch-Langchain-Chatglm2](https://github.com/iMagist486/ElasticSearch-Langchain-Chatglm2)
     """
-    with gr.Blocks(theme=gr.themes.Soft()) as demo:
+    with gr.Blocks() as demo:
         gr.Markdown(title)
 
         with gr.Row():
@@ -76,9 +76,9 @@ if __name__ == "__main__":
                 with gr.Row():
                     submitBtn = gr.Button("Submit", variant="primary")
                     emptyBtn = gr.Button("Clear History")
-            search_out = gr.Textbox(label="文档交互", interactive=False, scale=1)
+            search_out = gr.Textbox(label="文档交互", lines=25, max_lines=25, interactive=False, scale=1)
 
-        with gr.Row():
+        with gr.Row(variant='compact'):
             with gr.Column():
                 gr.Markdown("""LLM设置""")
                 max_length = gr.Slider(0, 32768, value=8192, step=1.0, label="Maximum length", interactive=True)
