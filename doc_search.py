@@ -24,6 +24,61 @@ def _default_knn_mapping(dims: int) -> Dict:
     }
 
 
+def generate_search_query(vec, size) -> Dict:
+    query = {
+        "query": {
+            "script_score": {
+                "query": {
+                    "match_all": {}
+                },
+                "script": {
+                    "source": "cosineSimilarity(params.queryVector, 'vector') + 1.0",
+                    "params": {
+                        "queryVector": vec
+                    }
+                }
+            }
+        },
+        "size": size
+    }
+    return query
+
+
+def generate_knn_query(vec, size) -> Dict:
+    query = {
+        "knn": {
+            "field": "vector",
+            "query_vector": vec,
+            "k": 10,
+            "num_candidates": 100
+        },
+        "size": size
+    }
+    return query
+
+
+def generate_hybrid_query(text, vec, size, knn_boost) -> Dict:
+    query = {
+        "query": {
+            "match": {
+                "text": {
+                    "query": text,
+                    "boost": 1 - knn_boost
+                }
+            }
+        },
+        "knn": {
+            "field": "vector",
+            "query_vector": vec,
+            "k": 10,
+            "num_candidates": 100,
+            "boost": knn_boost
+        },
+        "size": size
+    }
+    return query
+
+
 def load_file(filepath, chunk_size, chunk_overlap):
     loader = TextLoader(filepath, encoding='utf-8')
     documents = loader.load()
@@ -57,41 +112,21 @@ class ES:
         except Exception as e:
             return e
 
-    def exact_search(self, query, top_k):
-        result = []
-        similar_docs = self.es.similarity_search_with_score(query, k=top_k)
-        for i in similar_docs:
-            result.append({
-                'content': i[0].page_content,
-                'source': i[0].metadata['source'],
-                'score': i[1]
-            })
-        return result
-
-    def knn_search(self, query, top_k):
+    def doc_search(self, method, query, top_k, knn_boost):
         result = []
         query_vector = self.embedding.embed_query(query)
-        similar_docs = self.es.knn_search(query=query, query_vector=query_vector, k=top_k)
-        hits = [hit for hit in similar_docs["hits"]["hits"]]
+        if method == "近似查询":
+            query_body = generate_knn_query(vec=query_vector, size=top_k)
+        elif method == "混合查询":
+            query_body = generate_hybrid_query(text=query, vec=query_vector, size=top_k, knn_boost=knn_boost)
+        else:
+            query_body = generate_search_query(vec=query_vector, size=top_k)
+        response = self.client.search(index=self.es_params.index_name, body=query_body)
+        hits = [hit for hit in response["hits"]["hits"]]
         for i in hits:
             result.append({
                 'content': i['_source']['text'],
                 'source': i['_source']['metadata']['source'],
                 'score': i['_score']
             })
-        return result
-
-    def hybrid_search(self, query, top_k, knn_boost):
-        result = []
-        query_vector = self.embedding.embed_query(query)
-        similar_docs = self.es.knn_hybrid_search(query=query, query_vector=query_vector, knn_boost=knn_boost,
-                                                 query_boost=1 - knn_boost, k=top_k)
-        hits = [hit for hit in similar_docs["hits"]["hits"]]
-        for i in hits:
-            result.append({
-                'content': i['_source']['text'],
-                'source': i['_source']['metadata']['source'],
-                'score': i['_score']
-            })
-        result = result[:top_k]
         return result

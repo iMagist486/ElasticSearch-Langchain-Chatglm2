@@ -19,18 +19,11 @@ def clear_session():
 
 
 def search_doc(question, search_method, top_k, knn_boost, threshold):
-    if search_method == "近似查询":
-        res = es.knn_search(question, top_k)
-    elif search_method == "混合查询":
-        res = es.hybrid_search(question, top_k, knn_boost)
-    else:
-        res = es.exact_search(question, top_k)
-
+    res = es.doc_search(method=search_method, query=question, top_k=top_k, knn_boost=knn_boost)
     if threshold > 0:
         result = [i for i in res if i['score'] > threshold]
     else:
         result = res
-
     return result
 
 
@@ -97,7 +90,7 @@ if __name__ == "__main__":
 
             with gr.Column():
                 gr.Markdown("""知识库管理""")
-                file = gr.File(label='请上传知识库文件', file_types=['.txt', '.md', '.docx', '.pdf'])
+                file = gr.File(label='请上传知识库文件', file_types=['.txt', '.md', '.doc', '.docx'])
                 chunk_size = gr.Number(label="chunk_size", value=300, interactive=True)
                 chunk_overlap = gr.Number(label="chunk_overlap", value=10, interactive=True)
                 doc_upload = gr.Button("ES存储")
