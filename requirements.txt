@@ -1,5 +1,5 @@
-transformers
-sentence_transformers
-langchain
-elasticsearch
-gradio
+transformers >= 4.30.2
+sentence_transformers >= 2.2.2
+langchain >= 0.0.294
+elasticsearch >= 8.8.0
+gradio >= 3.36.1
