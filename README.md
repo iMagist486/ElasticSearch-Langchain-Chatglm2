@@ -22,6 +22,8 @@
 
 模型可修改为本地路径
 
+**增加对[InternLM](https://github.com/InternLM/InternLM)的支持：**`llm_model`修改为`internlm/internlm-chat-7b`即可。
+
 ### 运行web demo
 
 执行[web.py](https://github.com/iMagist486/ElasticSearch-Langchain-Chatglm2/blob/main/web.py) 

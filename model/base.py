@@ -1,12 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import Optional, List
-import traceback
-from collections import deque
-from queue import Queue
-from threading import Thread
-
-import torch
-import transformers
 
 
 class AnswerResult:

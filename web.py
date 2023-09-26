@@ -1,7 +1,7 @@
 import re
 import gradio as gr
 from doc_search import ES
-from model.chatglm_llm import ChatGLM
+from model.chatglm_llm import ChatLLM
 from configs.params import ModelParams
 
 PROMPT_TEMPLATE = """已知信息：
@@ -11,7 +11,8 @@ PROMPT_TEMPLATE = """已知信息：
 
 model_config = ModelParams()
 es = ES(model_config.embedding_model)
-llm = ChatGLM(model_config.llm_model)
+llm = ChatLLM()
+llm.load_llm()
 
 
 def clear_session():
